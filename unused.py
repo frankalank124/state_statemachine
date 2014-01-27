@@ -1,3 +1,5 @@
+#Used to store unused, but perhaps useful code    
+    
     def generate_map(self):
         """generate_map
         looks at the list of modules the user provided and generates a mapping
