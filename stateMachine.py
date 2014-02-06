@@ -5,10 +5,6 @@ StateMachine class
 
 Edited: 1/22/2014
 Last Edit by: Johnny Mao
-
-Owning Entity:
-Robotics@Maryland
-Robotics@Maryland Software Sub-team
 """
 
 #python imports
@@ -26,11 +22,8 @@ class StateMachine(threading.Thread):
     """
 
 
-    def __init__(self, machineID, currentState_ID = None, transitions = {}):
+    def __init__(self, machineID, currentStateID = None, transitions = {}):
         super(StateMachine, self).__init__()
-        
-        # not used at the moment
-        # termination_state = state.End("TERMINATE")
         
         self.machineID = machineID
         self.currentStateID = currentStateID
