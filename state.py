@@ -4,12 +4,9 @@
 # State class
 # End class, inherits State
 #
-# Last edit: 1/22/2014
+# Last edit: 2/20/2014
 # Last edit by: Johnny Mao
-#
-# Owning Entity:
-# Robotics@Maryland
-# Robotics@Maryland Software Sub-team
+
 
 #python imports
 import copy
@@ -64,13 +61,13 @@ class State(object):
     # @ param self The object pointer
     #
     # 
-    def transition(self):
+    def getTransition(self):
         return self.currTrans
 
     ##
     #
-    def listTransitions(self):
-        return 
+    #def listTransitions(self):
+    #    return 
 
     ## getState
     # @ param self The object pointer
@@ -88,12 +85,13 @@ class State(object):
     # @ param self The object pointer
     #
     def defaultEntry(self):
-        raise NotImplementedError("default_entry is not implemented.")
+        raise NotImplementedError("defaultEntry is not implemented.")
 
     ## leaveState
     # @ param self The object pointer
     #
     def leaveState(self, transition = None):
+        self.currTrans = "NO_TRANS"
         return self.leave.get(transition, self.defaultLeave)
 
     ## defaultLeave
@@ -115,8 +113,8 @@ class End(State):
 
     ## Constructor
     #
-    def __init__(self, name = "END"):
-        super(End, self).__init__(name)
+    def __init__(self, machine, name = "END"):
+        super(End, self).__init__(machine, name)
 
     ## transition
     #

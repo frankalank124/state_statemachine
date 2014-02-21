@@ -22,7 +22,7 @@ class StateMachine(threading.Thread):
     """
 
 
-    def __init__(self, machineID, currentStateID = None, transitions = {}):
+    def __init__(self, machineID, currentStateID = None, states = {}):
         super(StateMachine, self).__init__()
         
         self.machineID = machineID
@@ -31,7 +31,8 @@ class StateMachine(threading.Thread):
         self.currentTransition = "NO_TRANS"
         
         # mapping of state IDs and instantiated states
-        self.states = {"END" : state.End()}
+        self.states = {"END" : state.End(self)}
+        self.states.update(states)
 
         
     def run(self):
@@ -50,14 +51,14 @@ class StateMachine(threading.Thread):
             print traceback.format_exc() # currently prints, later log
 
            
-    def start_state(self):
+    def startState(self):
         """start_state
         function is called to perform whatever the entering state needs to do
 
         **note: this one line could be written in place of the function call
         within the above thread
         """
-        self.states[self.currentState_ID].enterState(self.lastTransition)()
+        self.states[self.currentStateID].enterState(self.lastTransition)()
 
 
     def getTransition(self, pause = 0.05):
@@ -68,7 +69,7 @@ class StateMachine(threading.Thread):
         
         while(self.currentTransition == "NO_TRANS"):
             self.currentTransition = self.states[self.currentStateID]\
-                                      .transition()
+                                      .getTransition()
             time.sleep(pause)
 
 
@@ -76,9 +77,10 @@ class StateMachine(threading.Thread):
         """do_transition
         performs transitions
         """
-        self.states[self.currentStateID].leaveState(self.lastTransition)()    
+
+        self.states[self.currentStateID].leaveState(self.currentTransition)()
         self.currentStateID = self.states[self.currentStateID]\
-                             .getState(self.currentTransition)
+                              .getState(self.currentTransition)
         self.lastTransition = self.currentTransition
         self.currentTransition = "NO_TRANS"
 
@@ -87,8 +89,10 @@ class StateMachine(threading.Thread):
         """is_complete
         indicates that this StateMachine has reached a terminating State.
         """
-        return self.states[self.currentStateID].isEnd();
+        return self.states[self.currentStateID].isEnd()
 
+    def leave(self):
+        self.currentTransition = "END"
 
     
 
